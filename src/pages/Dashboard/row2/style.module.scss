@@ -1,0 +1,14 @@
+.card-group {
+    display: grid !important;
+    grid-template-columns: auto auto auto;
+}
+
+.card-group > div{
+    border-radius: 1rem !important;
+    height: 320px !important;    
+    
+}
+
+.card1 {
+    grid-column: 1 / span 2;
+}

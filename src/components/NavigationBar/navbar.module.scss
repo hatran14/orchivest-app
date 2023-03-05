@@ -1,0 +1,14 @@
+@import url("@fontsource/pacifico");
+
+.navbar {
+    color: white;
+
+    .title {
+        font-family: 'Pacifico';
+        margin-top: 40px;
+        justify-content: center;
+        text-align: center;
+        font-size: 32px;
+        font-weight: 160;
+    }
+}
