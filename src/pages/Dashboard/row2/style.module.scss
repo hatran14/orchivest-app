@@ -16,11 +16,17 @@
     display: flex;
 }
 .graph{
-    width: 50%;
+    width: 60%;
+    height: 100%;
 }
+
+.card2 {
+    grid-column: 3 / span 1;
+    min-width: 400px;
+}
+
 .card2_inner {
     display: flex;
-    margin-bottom: 2%;
 }
 .row{
     margin: 2%;
