@@ -12,3 +12,36 @@
 .card1 {
     grid-column: 1 / span 2;
 }
+.card1_inner{
+    display: flex;
+}
+.graph{
+    width: 60%;
+    height: 100%;
+}
+
+.card2 {
+    grid-column: 3 / span 1;
+    min-width: 400px;
+}
+
+.card2_inner {
+    display: flex;
+}
+.row{
+    margin: 2%;
+    padding: 2%;
+    font-size: large;
+    font-weight: bold;
+}
+#tree{
+    width: 60%;
+    padding-left: 5%;
+    margin-bottom: 5%;
+}
+.unact{
+    background-color: red;
+}
+.act{
+    color: green;
+}
