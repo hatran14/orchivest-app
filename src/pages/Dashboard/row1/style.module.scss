@@ -1,4 +1,46 @@
 .card {
     border-radius: 1rem !important;
     height: 200px !important;
+    position: relative !important;
+
+    .title {
+        font-weight: bold;
+        font-size: medium;
+    }
+
+    .text {
+        font-size: xx-large;
+        font-weight: bolder;
+        text-align: center;
+        margin: 2.5rem 0;
+        max-width: 268.5px;
+        min-height: 48px;
+    }
+
+    .flag {
+        height: 20px;
+        width: 80px;
+        // background-color: red;
+        color: white;
+        text-align: center;
+        font-size: small;
+        font-weight: bolder;
+        position: relative !important;
+        margin: 0 !important;
+
+        .high {
+            background-color: red;
+            border-radius: 40px;
+        }
+
+        .normal {
+            background-color: green;
+            border-radius: 40px;
+        }
+
+        .low {
+            background-color: #0090B0;
+            border-radius: 40px;
+        }
+    }
 }

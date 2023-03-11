@@ -11,7 +11,7 @@ function InfoGroup() {
                     <Card.Title>Đồ thị</Card.Title>
                 </Card.Body>
             </Card>
-            <Card className={Style.card2}>
+            <Card>
                 <Card.Body>
                     <Card.Title>About cây</Card.Title>
                 </Card.Body>
