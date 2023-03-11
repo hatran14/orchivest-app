@@ -45,7 +45,7 @@ function InfoGroup() {
                 {
                     label: 'Temperature over 7 hours',
                     data: [30,32,35,37,33,34,31],
-                    backgroundColor:'rgba(0, 45, 87, 1)',
+                    backgroundColor:'rgba(0, 45, 87, 2)',
                 }
             ],
         },
@@ -141,7 +141,7 @@ function InfoGroup() {
                             <div className = {Style.row}>XXX</div>
                             <div className = {Style.row}>YYY</div>
                             <div className = {Style.row}>ZZZ</div>
-                            <div className = {Style.row}>
+                            <div className = {Style.row} id = {Style.row4}>
                             <Form>
                                 <Form.Check
                                     type="switch"
