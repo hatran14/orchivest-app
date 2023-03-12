@@ -82,8 +82,8 @@ function InfoGroup() {
             datasets: [
                 {
                     label: 'Temperature over 7 hours',
-                    data: [30,32,35,37,33,34,31],
-                    backgroundColor:'rgba(0, 45, 87, 1)',
+                    data: [30, 32, 35, 37, 33, 34, 31],
+                    backgroundColor: 'rgba(0, 45, 87, 1)',
                 }
             ],
         },
