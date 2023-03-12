@@ -2,7 +2,9 @@ import Style from './style.module.scss'
 import { CardGroup, Card } from 'react-bootstrap'
 import Tree from './plant.png'
 import Form from 'react-bootstrap/Form'
-import { useState } from 'react' 
+import { useState, useEffect, useMemo } from 'react'
+import { FetchData, PostData } from '../../../utils/test'
+import { furl, surl } from '../../../utils/url'
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -12,7 +14,7 @@ import {
     Title,
     Tooltip,
     Legend,
-  } from 'chart.js';
+} from 'chart.js';
 import { Line } from 'react-chartjs-2'
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -25,101 +27,139 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend
-  );
+);
+
+
 function InfoGroup() {
     //{`container top-3 ${isActive ? "shadow": ""}`}
     //d-flex p-4 gap-4
-    const [checked, setChecked] = useState();
+    const [Pump, setPump] = useState([]);
+    const [Fan, setFan] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState('1');
 
-    const handleListItemClick = (event,index)=>{
+    //data fetch
+    // useEffect(() => {
+    //     FetchData(furl + 'dadn-cnpm.1-pumper' + surl, setPump);
+    //     FetchData(furl + 'dadn-cnpm.1-fan' + surl, setFan);
+    // }, [])
+
+    useEffect(() => {
+        FetchData('https://io.adafruit.com/api/v2/hatran14/feeds/pump-test/data/last?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', setPump);
+        FetchData('https://io.adafruit.com/api/v2/hatran14/feeds/fan-test/data/last?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', setFan);
+    }, [])
+
+    const [pumpChecked, setPumpChecked] = useState();
+    const [fanChecked, setFanChecked] = useState();
+
+    useMemo(() => {
+        setPumpChecked(Pump?.value === 'ON' ? true : false)
+        setFanChecked(Fan?.value === 'ON' ? true : false)
+    }, [Pump, Fan])  
+
+    // console.log(Pump?.value)
+
+    const handleListItemClick = (event, index) => {
         setSelectedIndex(index)
     };
 
-    const xlabels =['1','2','3','4','5','6','7'];
+    const handlePumpChange = (event) => {
+        setPumpChecked(event.target.checked);
+        const value = event.target.checked ? 'ON' : 'OFF'
+        PostData('https://io.adafruit.com/api/v2/hatran14/feeds/pump-test/data?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', { value: value })
+    }
+
+    const handleFanChange = (event) => {
+        setFanChecked(event.target.checked);
+        const value = event.target.checked ? 'ON' : 'OFF'
+        PostData('https://io.adafruit.com/api/v2/hatran14/feeds/fan-test/data?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', { value: value })
+    }
+
+    const xlabels = ['1', '2', '3', '4', '5', '6', '7'];
     const ldata = [
         {
             key: '1',
             labels: xlabels,
-            datasets:[
+            datasets: [
                 {
                     label: 'Temperature over 7 hours',
                     data: [30,32,35,37,33,34,31],
-                    backgroundColor:'rgba(0, 45, 87, 2)',
+                    backgroundColor:'rgba(0, 45, 87, 1)',
                 }
             ],
         },
         {
             key: '2',
             labels: xlabels,
-            datasets:[
+            datasets: [
                 {
                     label: 'Air Humidity over 7 hours',
-                    data: [30,32,35,37,33,34,31],
-                    backgroundColor:'rgba(0, 45, 87, 1)',
+                    data: [30, 32, 35, 37, 33, 34, 31],
+                    backgroundColor: 'rgba(0, 45, 87, 1)',
                 }
             ],
         },
         {
             key: '3',
             labels: xlabels,
-            datasets:[
+            datasets: [
                 {
                     label: 'Illuminance over 7 hours',
-                    data: [30,32,35,37,33,34,31],
-                    backgroundColor:'rgba(0, 45, 87, 1)',
+                    data: [30, 32, 35, 37, 33, 34, 31],
+                    backgroundColor: 'rgba(0, 45, 87, 1)',
                 }
             ],
         },
         {
             key: '4',
             labels: xlabels,
-            datasets:[
+            datasets: [
                 {
                     label: 'Soil Moisture over 7 hours',
-                    data: [30,32,35,37,33,34,31],
-                    backgroundColor:'rgba(0, 45, 87, 1)',
+                    data: [30, 32, 35, 37, 33, 34, 31],
+                    backgroundColor: 'rgba(0, 45, 87, 1)',
                 }
             ],
         }
     ];
-    const tempData = ldata.find(data=>data.key === selectedIndex);
+
+
+    const tempData = ldata.find(data => data.key === selectedIndex);
     return (
         <CardGroup className={`d-flex p-4 gap-4 ${Style['card-group']}`}>
             <Card className={Style.card1}>
                 <Card.Body>
                     <Card.Title>Đồ thị</Card.Title>
-                    <div className = {Style.card1_inner}>
-                        <div className = 'col-3'>
-                        <List component="nav" aria-label="feature list">
+                    <div className={Style.card1_inner}>
+                        <div className='col-3'>
+                            <List component="nav" aria-label="feature list">
                                 <ListItemButton
-                                selected={selectedIndex === '1'}
-                                onClick={(event) => handleListItemClick(event, '1')}
+                                    selected={selectedIndex === '1'}
+                                    onClick={(event) => handleListItemClick(event, '1')}
                                 >
-                                    <ListItemText primary ="Temparature" />
+                                    <ListItemText primary="Temparature" />
                                 </ListItemButton>
                                 <ListItemButton
-                                selected={selectedIndex === '2'}
-                                onClick={(event) => handleListItemClick(event, '2')}
+                                    selected={selectedIndex === '2'}
+                                    onClick={(event) => handleListItemClick(event, '2')}
                                 >
-                                <ListItemText primary="Air Humidity" />
+                                    <ListItemText primary="Air Humidity" />
                                 </ListItemButton>
                                 <ListItemButton
-                                selected={selectedIndex === '3'}
-                                onClick={(event) => handleListItemClick(event, '3')}
+                                    selected={selectedIndex === '3'}
+                                    onClick={(event) => handleListItemClick(event, '3')}
                                 >
-                                <ListItemText primary="Illuminance" />
+                                    <ListItemText primary="Illuminance" />
                                 </ListItemButton>
                                 <ListItemButton
-                                selected={selectedIndex === '4'}
-                                onClick={(event) => handleListItemClick(event, '4')}
+                                    selected={selectedIndex === '4'}
+                                    onClick={(event) => handleListItemClick(event, '4')}
                                 >
-                                <ListItemText primary="Soil Moisture" />
+                                    <ListItemText primary="Soil Moisture" />
                                 </ListItemButton>
                             </List>
                         </div>
-                        <div className = {Style.graph}>
-                            <Line data = {tempData}/>
+                        <div className={Style.graph}>
+                            <Line data={tempData}/>
                         </div>
                     </div>
                 </Card.Body>
@@ -127,30 +167,44 @@ function InfoGroup() {
             <Card className={Style.card2}>
                 <Card.Body>
                     <Card.Title>About cây</Card.Title>
-                    <div className = {Style.card2_inner}>
-                        <div className = "col-3">
-                            <img src = {Tree} alt = "Orchid" id = {Style.tree}></img>
+                    <div className={Style.card2_inner}>
+                        <div className="col-3">
+                            <img src={Tree} alt="Orchid" id={Style.tree} width='200'></img>
                         </div>
-                        <div className = "col-4">
-                            <div className = {Style.row}>Age:</div>
-                            <div className = {Style.row}>Height:</div>
-                            <div className = {Style.row}>Last pumped: </div>
-                            <div className = {Style.row}>Pumper</div>
+                        <div className="col-4">
+                            <div className={Style.row}>Age:</div>
+                            <div className={Style.row}>Height:</div>
+                            <div className={Style.row}>Last pumped: </div>
+                            <div className={Style.row}>Pumper</div>
+                            <div className={Style.row}>Fan</div>
                         </div>
-                        <div className = "col-4">
-                            <div className = {Style.row}>XXX</div>
-                            <div className = {Style.row}>YYY</div>
-                            <div className = {Style.row}>ZZZ</div>
-                            <div className = {Style.row} id = {Style.row4}>
-                            <Form>
-                                <Form.Check
-                                    type="switch"
-                                    id="custom-switch"
-                                    onChange={()=>{setChecked(!checked)}}
-                                    label = {checked?"ON" : "OFF"}
-                                >
-                                </Form.Check>
-                            </Form>
+                        <div className="col-4">
+                            <div className={Style.row}>XXX</div>
+                            <div className={Style.row}>YYY</div>
+                            <div className={Style.row}>ZZZ</div>
+                            <div className={Style.row}>
+                                <Form>
+                                    <Form.Check
+                                        type="switch"
+                                        id="custom-switch"  
+                                        onChange={(event) => handlePumpChange(event)}
+                                        label={pumpChecked ? "ON" : "OFF"}
+                                        checked={pumpChecked}                        
+                                    >
+                                    </Form.Check>
+                                </Form>
+                            </div>
+                            <div className={Style.row}>
+                                <Form>
+                                    <Form.Check
+                                        type="switch"
+                                        id="custom-switch"
+                                        label={fanChecked ? "ON" : "OFF"}
+                                        onChange={(event) => handleFanChange(event)}
+                                        checked={fanChecked}
+                                    >
+                                    </Form.Check>
+                                </Form>
                             </div>
                         </div>
                     </div>
