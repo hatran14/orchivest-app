@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 
+
 // const FetchData = () => {
 //     const [lightData, setLightData] = useState([]);
 //     const [tempData, setTempData] = useState([]);
@@ -54,9 +55,20 @@ const FetchData = async (url, setContent) => {
         .then((res) => res.data)
         .then((data) => {
             return data
-        })    
+        })
         .catch((err) => console.log(err));
     setContent(rsp);
 }
 
-export { FetchData };
+const PostData = async (url, data) => {
+    const rsp = await axios
+        .post(url, data)
+        .then((res) => res.data)
+        .then((data) => {
+            return data
+        })
+        .catch((err) => console.log(err));
+    return rsp;
+}
+
+export { FetchData, PostData };

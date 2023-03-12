@@ -2,7 +2,9 @@ import Style from './style.module.scss'
 import { CardGroup, Card } from 'react-bootstrap'
 import Tree from './plant.png'
 import Form from 'react-bootstrap/Form'
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import { FetchData, PostData } from '../../../utils/test'
+import { furl, surl } from '../../../utils/url'
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -26,15 +28,51 @@ ChartJS.register(
     Tooltip,
     Legend
 );
+
+
 function InfoGroup() {
     //{`container top-3 ${isActive ? "shadow": ""}`}
     //d-flex p-4 gap-4
-    const [checked, setChecked] = useState();
+    const [Pump, setPump] = useState([]);
+    const [Fan, setFan] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState('1');
+
+    //data fetch
+    // useEffect(() => {
+    //     FetchData(furl + 'dadn-cnpm.1-pumper' + surl, setPump);
+    //     FetchData(furl + 'dadn-cnpm.1-fan' + surl, setFan);
+    // }, [])
+
+    useEffect(() => {
+        FetchData('https://io.adafruit.com/api/v2/hatran14/feeds/pump-test/data/last?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', setPump);
+        FetchData('https://io.adafruit.com/api/v2/hatran14/feeds/fan-test/data/last?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', setFan);
+    }, [])
+
+    const [pumpChecked, setPumpChecked] = useState();
+    const [fanChecked, setFanChecked] = useState();
+
+    useMemo(() => {
+        setPumpChecked(Pump?.value === 'ON' ? true : false)
+        setFanChecked(Fan?.value === 'ON' ? true : false)
+    }, [Pump, Fan])  
+
+    // console.log(Pump?.value)
 
     const handleListItemClick = (event, index) => {
         setSelectedIndex(index)
     };
+
+    const handlePumpChange = (event) => {
+        setPumpChecked(event.target.checked);
+        const value = event.target.checked ? 'ON' : 'OFF'
+        PostData('https://io.adafruit.com/api/v2/hatran14/feeds/pump-test/data?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', { value: value })
+    }
+
+    const handleFanChange = (event) => {
+        setFanChecked(event.target.checked);
+        const value = event.target.checked ? 'ON' : 'OFF'
+        PostData('https://io.adafruit.com/api/v2/hatran14/feeds/fan-test/data?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', { value: value })
+    }
 
     const xlabels = ['1', '2', '3', '4', '5', '6', '7'];
     const ldata = [
@@ -83,6 +121,8 @@ function InfoGroup() {
             ],
         }
     ];
+
+
     const tempData = ldata.find(data => data.key === selectedIndex);
     return (
         <CardGroup className={`d-flex p-4 gap-4 ${Style['card-group']}`}>
@@ -119,12 +159,12 @@ function InfoGroup() {
                             </List>
                         </div>
                         <div className={Style.graph}>
-                            <Line data={tempData} />
+                            <Line data={tempData}/>
                         </div>
                     </div>
                 </Card.Body>
             </Card>
-            <Card>
+            <Card className={Style.card2}>
                 <Card.Body>
                     <Card.Title>About cây</Card.Title>
                     <div className={Style.card2_inner}>
@@ -136,6 +176,7 @@ function InfoGroup() {
                             <div className={Style.row}>Height:</div>
                             <div className={Style.row}>Last pumped: </div>
                             <div className={Style.row}>Pumper</div>
+                            <div className={Style.row}>Fan</div>
                         </div>
                         <div className="col-4">
                             <div className={Style.row}>XXX</div>
@@ -145,9 +186,22 @@ function InfoGroup() {
                                 <Form>
                                     <Form.Check
                                         type="switch"
+                                        id="custom-switch"  
+                                        onChange={(event) => handlePumpChange(event)}
+                                        label={pumpChecked ? "ON" : "OFF"}
+                                        checked={pumpChecked}                        
+                                    >
+                                    </Form.Check>
+                                </Form>
+                            </div>
+                            <div className={Style.row}>
+                                <Form>
+                                    <Form.Check
+                                        type="switch"
                                         id="custom-switch"
-                                        onChange={() => { setChecked(!checked) }}
-                                        label={checked ? "ON" : "OFF"}
+                                        label={fanChecked ? "ON" : "OFF"}
+                                        onChange={(event) => handleFanChange(event)}
+                                        checked={fanChecked}
                                     >
                                     </Form.Check>
                                 </Form>
