@@ -36,6 +36,9 @@ function InfoGroup() {
     const [Pump, setPump] = useState([]);
     const [Fan, setFan] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState('1');
+    const [pumpChecked, setPumpChecked] = useState();
+    const [fanChecked, setFanChecked] = useState();
+    const [run, setRun] = useState(false);
 
     //data fetch
     // useEffect(() => {
@@ -43,18 +46,37 @@ function InfoGroup() {
     //     FetchData(furl + 'dadn-cnpm.1-fan' + surl, setFan);
     // }, [])
 
-    useEffect(() => {
-        FetchData('https://io.adafruit.com/api/v2/hatran14/feeds/pump-test/data/last?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', setPump);
-        FetchData('https://io.adafruit.com/api/v2/hatran14/feeds/fan-test/data/last?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', setFan);
-    }, [])
-
-    const [pumpChecked, setPumpChecked] = useState();
-    const [fanChecked, setFanChecked] = useState();
+    // useEffect(() => {
+    //     FetchData('https://io.adafruit.com/api/v2/hatran14/feeds/pump-test/data/last?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', setPump);
+    //     FetchData('https://io.adafruit.com/api/v2/hatran14/feeds/fan-test/data/last?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', setFan);
+    // }, [])
 
     useMemo(() => {
-        setPumpChecked(Pump?.value === 'ON' ? true : false)
-        setFanChecked(Fan?.value === 'ON' ? true : false)
-    }, [Pump, Fan])  
+        if (run) {
+            const interval = setInterval(() => {
+                FetchData(furl + 'dadn-cnpm.1-pumper' + surl, setPump);
+                FetchData(furl + 'dadn-cnpm.1-fan' + surl, setFan); 
+            }, 5000);
+            return () => clearInterval(interval);
+        }
+        else {
+            setRun(true);
+            FetchData(furl + 'dadn-cnpm.1-pumper' + surl, setPump);
+            FetchData(furl + 'dadn-cnpm.1-fan' + surl, setFan);
+        }
+    }, [run])
+
+    // console.log(Pump, Fan)
+
+    useMemo(() => {
+        setPumpChecked(Pump?.value === '1' ? true : false)
+        console.log("pump")
+    }, [Pump?.value])  
+
+    useMemo(() => {
+        setFanChecked(Fan?.value === '1' ? true : false)
+        console.log("fan")
+    }, [Fan?.value])  
 
     // console.log(Pump?.value)
 
@@ -63,15 +85,15 @@ function InfoGroup() {
     };
 
     const handlePumpChange = (event) => {
-        setPumpChecked(event.target.checked);
-        const value = event.target.checked ? 'ON' : 'OFF'
-        PostData('https://io.adafruit.com/api/v2/hatran14/feeds/pump-test/data?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', { value: value })
+        const value = event.target.checked ? '1' : '0'
+        PostData(furl + 'dadn-cnpm.1-pumper' + surl, { value: value })
+        setPump({ value: value })
     }
 
     const handleFanChange = (event) => {
-        setFanChecked(event.target.checked);
-        const value = event.target.checked ? 'ON' : 'OFF'
-        PostData('https://io.adafruit.com/api/v2/hatran14/feeds/fan-test/data?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', { value: value })
+        const value = event.target.checked ? '1' : '0'
+        PostData(furl + 'dadn-cnpm.1-fan' + surl, { value: value })
+        setFan({ value: value })
     }
 
     const xlabels = ['1', '2', '3', '4', '5', '6', '7'];
