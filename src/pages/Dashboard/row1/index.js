@@ -3,7 +3,7 @@ import { CardGroup, Card } from 'react-bootstrap'
 import React from 'react'
 import { useMemo, useState } from 'react'
 import { FetchData } from '../../../utils/test'
-import { furl, surl } from '../../../utils/url'
+import { furl, last_data_url, data_url } from '../../../utils/url'
 
 function StatusCard() {
     const [TempData, setTempData] = useState([]);
@@ -19,7 +19,7 @@ function StatusCard() {
         if (run) {
             const interval = setInterval(() => {
                 feed_keys.map((key, index) => {
-                    FetchData(furl + key + surl, setters[index]);
+                    FetchData(furl + key + last_data_url, setters[index]);
                 })
             }, 5000);
             return () => clearInterval(interval);
@@ -27,22 +27,22 @@ function StatusCard() {
         else {
             setRun(true);
             feed_keys.map((key, index) => {
-                FetchData(furl + key + surl, setters[index]);
+                FetchData(furl + key + last_data_url, setters[index]);
             })
         }
     }, [run])
 
     const data = [TempData, HumidData, LightData, MoistData]
 
-    // console.group(run)
-    // console.log(data)
-    // console.groupEnd()
+    console.group(run)
+    console.log(data)
+    console.groupEnd()
 
     const titles = ['Temperature', 'Humidity', 'Illumination', 'Soil Moisture']
     const icons = ['fa-solid fa-temperature-low', 'fa-solid fa-droplet', 'fa-solid fa-sun', 'fa-solid fa-droplet']
 
     const render = (title, data) => {
-        const val = data[0]?.value
+        const val = data?.value
 
         if (title === 'Temperature') {
             return val ? val + ' °C' : '';
@@ -62,7 +62,7 @@ function StatusCard() {
     }
 
     return (
-        <CardGroup className='d-flex p-4 gap-4'>
+        <CardGroup className='d-flex pt-3 pb-3 px-4 py-4 gap-4 gap-4'>
             {titles.map((title, index) =>
                 <Card key={index} className={Style.card}>
                     <Card.Body className='pb-2'>

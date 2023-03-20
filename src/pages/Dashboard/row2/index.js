@@ -4,7 +4,7 @@ import Tree from './plant.png'
 import Form from 'react-bootstrap/Form'
 import { useState, useEffect, useMemo } from 'react'
 import { FetchData, PostData } from '../../../utils/test'
-import { furl, surl } from '../../../utils/url'
+import { furl, last_data_url, data_url } from '../../../utils/url'
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -16,9 +16,8 @@ import {
     Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2'
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
+import ToggleButton from 'react-bootstrap/ToggleButton';
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -54,15 +53,15 @@ function InfoGroup() {
     useMemo(() => {
         if (run) {
             const interval = setInterval(() => {
-                FetchData(furl + 'dadn-cnpm.1-pumper' + surl, setPump);
-                FetchData(furl + 'dadn-cnpm.1-fan' + surl, setFan); 
+                FetchData(furl + 'dadn-cnpm.1-pumper' + last_data_url, setPump);
+                FetchData(furl + 'dadn-cnpm.1-fan' + last_data_url, setFan); 
             }, 5000);
             return () => clearInterval(interval);
         }
         else {
             setRun(true);
-            FetchData(furl + 'dadn-cnpm.1-pumper' + surl, setPump);
-            FetchData(furl + 'dadn-cnpm.1-fan' + surl, setFan);
+            FetchData(furl + 'dadn-cnpm.1-pumper' + last_data_url, setPump);
+            FetchData(furl + 'dadn-cnpm.1-fan' + last_data_url, setFan);
         }
     }, [run])
 
@@ -70,32 +69,34 @@ function InfoGroup() {
 
     useMemo(() => {
         setPumpChecked(Pump?.value === '1' ? true : false)
-        console.log("pump")
+        // console.log("pump")
     }, [Pump?.value])  
 
     useMemo(() => {
         setFanChecked(Fan?.value === '1' ? true : false)
-        console.log("fan")
+        // console.log("fan")
     }, [Fan?.value])  
 
     // console.log(Pump?.value)
 
-    const handleListItemClick = (event, index) => {
+    const handleListItemClick = (index) => {
         setSelectedIndex(index)
     };
 
     const handlePumpChange = (event) => {
         const value = event.target.checked ? '1' : '0'
-        PostData(furl + 'dadn-cnpm.1-pumper' + surl, { value: value })
+        PostData(furl + 'dadn-cnpm.1-pumper' + data_url, { value: value })
         setPump({ value: value })
     }
 
     const handleFanChange = (event) => {
         const value = event.target.checked ? '1' : '0'
-        PostData(furl + 'dadn-cnpm.1-fan' + surl, { value: value })
+        PostData(furl + 'dadn-cnpm.1-fan' + data_url, { value: value })
         setFan({ value: value })
     }
-
+    const opts = {
+        responsive: true,
+    };
     const xlabels = ['1', '2', '3', '4', '5', '6', '7'];
     const ldata = [
         {
@@ -106,6 +107,7 @@ function InfoGroup() {
                     label: 'Temperature over 7 hours',
                     data: [30, 32, 35, 37, 33, 34, 31],
                     backgroundColor: 'rgba(0, 45, 87, 1)',
+                    borderColor:'rgba(0, 45, 87, 1)',
                 }
             ],
         },
@@ -117,6 +119,7 @@ function InfoGroup() {
                     label: 'Air Humidity over 7 hours',
                     data: [30, 32, 35, 37, 33, 34, 31],
                     backgroundColor: 'rgba(0, 45, 87, 1)',
+                    borderColor:'rgba(0, 45, 87, 1)',
                 }
             ],
         },
@@ -128,6 +131,7 @@ function InfoGroup() {
                     label: 'Illuminance over 7 hours',
                     data: [30, 32, 35, 37, 33, 34, 31],
                     backgroundColor: 'rgba(0, 45, 87, 1)',
+                    borderColor:'rgba(0, 45, 87, 1)',
                 }
             ],
         },
@@ -139,6 +143,7 @@ function InfoGroup() {
                     label: 'Soil Moisture over 7 hours',
                     data: [30, 32, 35, 37, 33, 34, 31],
                     backgroundColor: 'rgba(0, 45, 87, 1)',
+                    borderColor:'rgba(0, 45, 87, 1)',
                 }
             ],
         }
@@ -147,48 +152,28 @@ function InfoGroup() {
 
     const tempData = ldata.find(data => data.key === selectedIndex);
     return (
-        <CardGroup className={`d-flex p-4 gap-4 ${Style['card-group']}`}>
+        <CardGroup className={`d-flex pt-2 pb-2 px-4 py-4 gap-4 ${Style['card-group']}`}>
             <Card className={Style.card1}>
                 <Card.Body>
-                    <Card.Title>Đồ thị</Card.Title>
+                    <Card.Title className={Style.title}>Đồ thị</Card.Title>
                     <div className={Style.card1_inner}>
-                        <div className='col-3'>
-                            <List component="nav" aria-label="feature list">
-                                <ListItemButton
-                                    selected={selectedIndex === '1'}
-                                    onClick={(event) => handleListItemClick(event, '1')}
-                                >
-                                    <ListItemText primary="Temparature" />
-                                </ListItemButton>
-                                <ListItemButton
-                                    selected={selectedIndex === '2'}
-                                    onClick={(event) => handleListItemClick(event, '2')}
-                                >
-                                    <ListItemText primary="Air Humidity" />
-                                </ListItemButton>
-                                <ListItemButton
-                                    selected={selectedIndex === '3'}
-                                    onClick={(event) => handleListItemClick(event, '3')}
-                                >
-                                    <ListItemText primary="Illuminance" />
-                                </ListItemButton>
-                                <ListItemButton
-                                    selected={selectedIndex === '4'}
-                                    onClick={(event) => handleListItemClick(event, '4')}
-                                >
-                                    <ListItemText primary="Soil Moisture" />
-                                </ListItemButton>
-                            </List>
+                        <div className= {Style.col11}>
+                            <ToggleButtonGroup vertical className = {Style.ButtonGroup} defaultValue= {'1'} name = "GraphOptions" type = "radio">
+                                <ToggleButton className={Style.Button} onClick={()=>handleListItemClick('1')} value = {'1'} id ="1">Temperature</ToggleButton>
+                                <ToggleButton className={Style.Button} onClick={()=>handleListItemClick('2')} value = {'2'} id ="2">Air Humidity</ToggleButton>
+                                <ToggleButton className={Style.Button} onClick={()=>handleListItemClick('3')} value = {'3'} id ="3">Illuminance</ToggleButton>
+                                <ToggleButton className={Style.Button} onClick={()=>handleListItemClick('4')} value = {'4'} id ="4">Soil Moisture</ToggleButton>
+                            </ToggleButtonGroup>
                         </div>
-                        <div className={Style.graph}>
-                            <Line data={tempData}/>
+                        <div className= {Style.col12}>
+                            <Line className={Style.graph} options={opts} data={tempData}/>
                         </div>
                     </div>
                 </Card.Body>
             </Card>
             <Card className={Style.card2}>
                 <Card.Body>
-                    <Card.Title>About cây</Card.Title>
+                    <Card.Title className={Style.title}>About cây</Card.Title>
                     <div className={Style.card2_inner}>
                         <div className="col-3">
                             <img src={Tree} alt="Orchid" id={Style.tree} width='200'></img>

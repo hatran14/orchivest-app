@@ -1,3 +1,24 @@
 .header {
     color: var(--primary-color);
 }
+
+.title {
+    display: flex;
+}
+
+.title > img {
+    width: 100px;
+    height: 84px;
+    align-items: center;
+    margin: 16px;
+}
+
+.h1 {
+    align-items: center;
+    margin-top: 36px;
+}
+
+.h1 > h1 {
+    font-size: 20px;
+    font-weight: bolder;
+}
