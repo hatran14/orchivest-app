@@ -11,4 +11,15 @@
         font-size: 32px;
         font-weight: 160;
     }
+    width: 10vw;
+}
+.navIcon{
+    color: white;
+    width: 100%;
+}
+.navDiv:hover{
+  background-color: #001e3d;
+}
+.navDiv:focus{
+    background-color: red;
 }

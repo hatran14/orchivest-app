@@ -11,13 +11,46 @@
 .card1 {
     grid-column: 1 / span 2;
     height: 600px !important;
+    min-width: 20vw;
 }
 .card1_inner{
     display: flex;
 }
-.graph{
-    min-width: 60%;
-    height: 100%;
+.col11{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    .ButtonGroup{
+        margin-top: 3%;
+    }
+    .Button{
+        width: 100%;
+        margin: 1.5%;
+        padding: 3.5%;
+        background-color: white;
+        color:#002D57;
+        border-color: white;
+        font-size: 1vw;
+        font-weight: bold;
+    }
+    .Button:checked{
+        background-color: #002D57;
+        color: red;
+    }
+    .Button:hover{
+        background-color: azure;
+        border-color: white;
+        color:#002D57;
+    }
+}
+.col12{
+    width: 70%;
+    .graph{
+        max-width: 90%;
+        max-height: 110%;
+        padding-left: 10%;
+        padding-bottom: 5%;
+    }
 }
 
 .card2 {
@@ -46,4 +79,11 @@
 }
 .act{
     color: green;
+}
+#row4{
+    min-width: 100px;
+}
+.title {
+    font-weight: bold;
+    font-size: 130%;
 }
