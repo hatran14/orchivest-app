@@ -4,7 +4,7 @@ import Tree from './plant.png'
 import Form from 'react-bootstrap/Form'
 import { useState, useEffect, useMemo } from 'react'
 import { FetchData, PostData } from '../../../utils/test'
-import { furl, surl } from '../../../utils/url'
+import { furl, last_data_url, data_url } from '../../../utils/url'
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -36,6 +36,7 @@ function InfoGroup() {
     const [Pump, setPump] = useState([]);
     const [Fan, setFan] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState('1');
+    const [run, setRun] = useState(false);
 
     //data fetch
     // useEffect(() => {
@@ -52,9 +53,31 @@ function InfoGroup() {
     const [fanChecked, setFanChecked] = useState();
 
     useMemo(() => {
-        setPumpChecked(Pump?.value === 'ON' ? true : false)
-        setFanChecked(Fan?.value === 'ON' ? true : false)
-    }, [Pump, Fan])  
+        if (run) {
+            const interval = setInterval(() => {
+                FetchData(furl + 'dadn-cnpm.1-pumper' + last_data_url, setPump);
+                FetchData(furl + 'dadn-cnpm.1-fan' + last_data_url, setFan); 
+            }, 5000);
+            return () => clearInterval(interval);
+        }
+        else {
+            setRun(true);
+            FetchData(furl + 'dadn-cnpm.1-pumper' + last_data_url, setPump);
+            FetchData(furl + 'dadn-cnpm.1-fan' + last_data_url, setFan);
+        }
+    }, [run])
+
+    // console.log(Pump, Fan)
+
+    useMemo(() => {
+        setPumpChecked(Pump?.value === '1' ? true : false)
+        // console.log("pump")
+    }, [Pump?.value])  
+
+    useMemo(() => {
+        setFanChecked(Fan?.value === '1' ? true : false)
+        // console.log("fan")
+    }, [Fan?.value])  
 
     // console.log(Pump?.value)
 
@@ -63,15 +86,15 @@ function InfoGroup() {
     };
 
     const handlePumpChange = (event) => {
-        setPumpChecked(event.target.checked);
-        const value = event.target.checked ? 'ON' : 'OFF'
-        PostData('https://io.adafruit.com/api/v2/hatran14/feeds/pump-test/data?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', { value: value })
+        const value = event.target.checked ? '1' : '0'
+        PostData(furl + 'dadn-cnpm.1-pumper' + data_url, { value: value })
+        setPump({ value: value })
     }
 
     const handleFanChange = (event) => {
-        setFanChecked(event.target.checked);
-        const value = event.target.checked ? 'ON' : 'OFF'
-        PostData('https://io.adafruit.com/api/v2/hatran14/feeds/fan-test/data?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', { value: value })
+        const value = event.target.checked ? '1' : '0'
+        PostData(furl + 'dadn-cnpm.1-fan' + data_url, { value: value })
+        setFan({ value: value })
     }
 
     const xlabels = ['1', '2', '3', '4', '5', '6', '7'];
@@ -125,7 +148,7 @@ function InfoGroup() {
 
     const tempData = ldata.find(data => data.key === selectedIndex);
     return (
-        <CardGroup className={`d-flex p-4 gap-4 ${Style['card-group']}`}>
+        <CardGroup className={`d-flex pt-2 pb-2 px-4 py-4 gap-4 ${Style['card-group']}`}>
             <Card className={Style.card1}>
                 <Card.Body>
                     <Card.Title>Đồ thị</Card.Title>
