@@ -16,8 +16,8 @@ function NavBar() {
             <div className={Style.title}>
                 Orchivest
             </div>
-            <List>
-              <ListItem className={Style.navDiv}>
+            <List sx={{mt: 3}}>
+              <ListItem className={`${Style.navDiv} ${Style.selected}`} >
                 <ListItemButton>
                   <ListItemIcon>
                     <SpeedIcon className={Style.navIcon}/>

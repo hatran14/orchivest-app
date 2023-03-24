@@ -1,12 +1,15 @@
 .header {
     color: var(--primary-color);
+    display: flex;
 }
 
 .title {
     display: flex;
+    background-color: var(--secondary-color);
+    z-index: -1;
 }
 
-.title > img {
+.title>img {
     width: 100px;
     height: 84px;
     align-items: center;
@@ -18,7 +21,53 @@
     margin-top: 36px;
 }
 
-.h1 > h1 {
+.h1>h1 {
     font-size: 20px;
     font-weight: bolder;
+}
+
+.right {
+    width: 30%;
+    height: 120px;
+    margin-left: 40px;
+    display: flex;
+    flex-grow: 1;
+    border-bottom: 120px solid var(--primary-color);
+    border-left: 40px solid transparent;
+    border-right: 0 solid transparent;
+    border-top: 0 solid transparent;
+
+    .slider {
+        transform: skew(-20deg, 0deg);
+        -moz-transform: skew(-20deg, 0deg);
+        -webkit-transform: skew(-20deg, 0deg);
+        -o-transform: skew(-20deg, 0deg);
+        -ms-transform: skew(-20deg, 0deg);
+        width: 70%;
+    }
+
+    .account {
+        width: 30%;
+        height: 120px;
+
+        .dropdownStyle {
+            margin: auto;
+            margin-top: 16%;
+            min-width: 10vw;
+            border-radius: 1rem !important;
+            background-color: var(--secondary-color) !important;
+            border: none !important;
+            color: var(--primary-color) !important;
+            font-weight: bold !important;
+            justify-content: space-between !important;
+            --bs-dropdown-link-active-bg: var(--primary-color) !important;   
+            display: inline-flex;
+            align-items: center;
+        }
+    }
+}
+
+.img {
+    height: 120px;
+    width: 100%;
 }

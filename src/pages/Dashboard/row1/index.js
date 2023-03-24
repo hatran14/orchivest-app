@@ -3,7 +3,7 @@ import { CardGroup, Card } from 'react-bootstrap'
 import React from 'react'
 import { useMemo, useState } from 'react'
 import { FetchData } from '../../../utils/test'
-import { furl, last_data_url, data_url } from '../../../utils/url'
+import { furl, last_data_url } from '../../../utils/url'
 
 function StatusCard() {
     const [TempData, setTempData] = useState([]);
@@ -21,7 +21,7 @@ function StatusCard() {
                 feed_keys.map((key, index) => {
                     FetchData(furl + key + last_data_url, setters[index]);
                 })
-            }, 5000);
+            }, 10000);
             return () => clearInterval(interval);
         }
         else {
@@ -34,9 +34,9 @@ function StatusCard() {
 
     const data = [TempData, HumidData, LightData, MoistData]
 
-    console.group(run)
-    console.log(data)
-    console.groupEnd()
+    // console.group(run)
+    // console.log(data)
+    // console.groupEnd()
 
     const titles = ['Temperature', 'Humidity', 'Illumination', 'Soil Moisture']
     const icons = ['fa-solid fa-temperature-low', 'fa-solid fa-droplet', 'fa-solid fa-sun', 'fa-solid fa-droplet']
@@ -73,9 +73,12 @@ function StatusCard() {
                         <Card.Text className={`align-middle ${Style.text}`}>
                             {render(title, data[index])}
                         </Card.Text>
-                        <div className={Style.flag}>
-                            <div className={Style.low}>Low</div>
+                        <div className='d-flex justify-content-end align-items-end'>
+                            <div className={Style.flag}>
+                                <div className={Style.low}>Low</div>
+                            </div>
                         </div>
+
                     </Card.Body>
                 </Card>
             )}

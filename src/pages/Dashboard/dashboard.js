@@ -12,14 +12,14 @@ function SelectTree() {
     }
 
     return (
-        <Dropdown>
+        <Dropdown className="d-flex justify-content-start pt-2">
             <Dropdown.Toggle variant="success" id="dropdown-basic" className={Style.dropdownStyle}>
                 {tree}
             </Dropdown.Toggle>
             <Dropdown.Menu>
-                <Dropdown.Item href="#/action-1" onClick={(e) => handleChange(e)}>Plant 1</Dropdown.Item>
-                <Dropdown.Item href="#/action-2" onClick={(e) => handleChange(e)}>Plant 2</Dropdown.Item>
-                <Dropdown.Item href="#/action-3" onClick={(e) => handleChange(e)}>Plant 3</Dropdown.Item>
+                <Dropdown.Item onClick={(e) => handleChange(e)}>Plant 1</Dropdown.Item>
+                <Dropdown.Item onClick={(e) => handleChange(e)}>Plant 2</Dropdown.Item>
+                <Dropdown.Item onClick={(e) => handleChange(e)}>Plant 3</Dropdown.Item>
             </Dropdown.Menu>
         </Dropdown>
     )

@@ -55,7 +55,7 @@ function InfoGroup() {
             const interval = setInterval(() => {
                 FetchData(furl + 'dadn-cnpm.1-pumper' + last_data_url, setPump);
                 FetchData(furl + 'dadn-cnpm.1-fan' + last_data_url, setFan); 
-            }, 5000);
+            }, 10000);
             return () => clearInterval(interval);
         }
         else {
