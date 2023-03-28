@@ -1,4 +1,3 @@
-import zIndex from "@mui/material/styles/zIndex";
 import React from "react";
 import Header from "../Header/header";
 import NavigationBar from "../NavigationBar/navigation-bar";
