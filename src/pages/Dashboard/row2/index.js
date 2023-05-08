@@ -50,29 +50,35 @@ function InfoGroup() {
     //     FetchData('https://io.adafruit.com/api/v2/hatran14/feeds/fan-test/data/last?x-aio-key=aio_Nkrh55KYxGJftv0IfU3OiiXq8GAq', setFan);
     // }, [])
 
-    useMemo(() => {
-        if (run) {
-            const interval = setInterval(() => {
-                FetchData(furl + 'dadn-cnpm.1-pumper' + last_data_url, setPump);
-                FetchData(furl + 'dadn-cnpm.1-fan' + last_data_url, setFan);
-            }, 10000);
-            return () => clearInterval(interval);
-        }
-        else {
-            setRun(true);
-            FetchData(furl + 'dadn-cnpm.1-pumper' + last_data_url, setPump);
-            FetchData(furl + 'dadn-cnpm.1-fan' + last_data_url, setFan);
-        }
-    }, [run])
+    // useMemo(() => {
+    //     if (run) {
+    //         const interval = setInterval(() => {
+    //             FetchData(furl + 'dadn-cnpm.1-pumper' + last_data_url, setPump);
+    //             FetchData(furl + 'dadn-cnpm.1-fan' + last_data_url, setFan);
+    //         }, 10000);
+    //         return () => clearInterval(interval);
+    //     }
+    //     else {
+    //         setRun(true);
+    //         FetchData(furl + 'dadn-cnpm.1-pumper' + last_data_url, setPump);
+    //         FetchData(furl + 'dadn-cnpm.1-fan' + last_data_url, setFan);
+    //     }
+    // }, [run])
+
+
+    useEffect(() => {
+        FetchData(furl + 'dadn-cnpm.1-pumper' + last_data_url, setPump);
+        FetchData(furl + 'dadn-cnpm.1-fan' + last_data_url, setFan);
+    }, [])
 
     // console.log(Pump, Fan)
 
-    useMemo(() => {
+    useEffect(() => {
         setPumpChecked(Pump?.value === '1' ? true : false)
         // console.log("pump")
     }, [Pump?.value])
 
-    useMemo(() => {
+    useEffect(() => {
         setFanChecked(Fan?.value === '1' ? true : false)
         // console.log("fan")
     }, [Fan?.value])
